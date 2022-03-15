@@ -5,8 +5,7 @@
 
 using namespace std;
 
-void getLine(ifstream& bigStonk, int var)
-{
+void getLine(ifstream& bigStonk, int var){
     string date;
     string open;
     string high;
@@ -14,7 +13,6 @@ void getLine(ifstream& bigStonk, int var)
     string close;
     string adjClose;
     string volume;
-
     getline(bigStonk, date, ',');
     getline(bigStonk, open, ',');
     getline(bigStonk, high, ',');
@@ -28,20 +26,40 @@ void getLine(ifstream& bigStonk, int var)
         cout << "   " << date << "    |    " << open << "    |    " << high << "    |     " << low << "    |    " << close << "   |  " << adjClose << " |  " << volume << "\n";
 }
 
-int main()
-{
+int64_t poti(int n){
+    int64_t num = 3;
+    for(int i = 0; i < n; i++){
+        num *= 3;
+    }
+    return num;
+}
+
+int64_t Hash(string name){ //max 15 Zeichen
+    int64_t hashed = 0;
+    int64_t n = name.size();
+    int64_t m = 1;
+    for(int i = 0; i < n; i++){
+        int64_t letter = name[i];
+        hashed += letter * poti(n-m);
+        hashed %= 2011;
+        hashed *= name.size();
+        m++;
+    }
+    hashed %= 2011;
+    return hashed;
+}
+
+int main(){
     ifstream bigStonk("../CSV/MSFT.csv");
-
     if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
-
     getLine(bigStonk, 0);
-
-    while(bigStonk.good())
-    {
+    while(bigStonk.good()){
         getLine(bigStonk, 1);
     }
+    string hashi = "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
     cout << "#____________________________________________________________________________________#" << endl;
-
-
+    cout << "\n Hash test: \n" << endl;
+    int64_t hashed = Hash(hashi);
+    cout << hashed << endl;
     return 0;
 }
