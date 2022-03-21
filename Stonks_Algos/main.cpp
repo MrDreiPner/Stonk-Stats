@@ -2,9 +2,7 @@
 #include <assert.h>
 #include <fstream>
 #include <conio.h>
-#include <sstream>
 #include "aktie.h"
-#include <sstream>
 
 using namespace std;
 
@@ -19,9 +17,7 @@ int main(){
     Aktie hashTabelle[2011];
     string selAktKuerzel = "0";
     string csvCall = "../CSV/"+selAktKuerzel+".csv";
-    stringstream stream;
     int64_t hashWert = 0;
-    stringstream ss;
     char input = '\0';
     while(input != 'q'){
         system("CLS");
