@@ -151,10 +151,40 @@ int main(){
             }
             break;
             case 'c':{
-
+                ofstream file;
+                file.open("hashTabelle.csv");
+                for(int i = 0; i < 2011; i++){
+                    if(hashTabelle[i].getHashWert() == 0)
+                        continue;
+                    file << hashTabelle[i].getAktienName();
+                    file << ",";
+                    file << hashTabelle[i].getAktienKuerzel();
+                    file << ",";
+                    file << hashTabelle[i].getWKN();
+                    file << ",";
+                    file << hashTabelle[i].getHashWert();
+                    file << "\n";
+                }
             }
             break;
             case 'v':{
+                ifstream fileIn("hashTabelle.csv");
+                while(fileIn.good()){
+                    string name;
+                    string kuerzel;
+                    string wkn;
+                    string hashNum;
+                    getline(fileIn, name, ',');
+                    getline(fileIn, kuerzel, ',');
+                    getline(fileIn, wkn, ',');
+                    getline(fileIn, hashNum, '\n');
+                    int64_t hashy = stoi(hashNum);
+                    hashTabelle[hashy].setAktienName(name);
+                    hashTabelle[hashy].setAktienKuerzel(kuerzel);
+                    hashTabelle[hashy].setWKN(wkn);
+                    hashTabelle[hashy].setHashWert(hashy);
+                }
+
 
             }
             break;
