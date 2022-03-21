@@ -7,19 +7,10 @@
 using namespace std;
 
 void getLine(ifstream& bigStonk, int var);
+void printLastCSV(ifstream& bigStonk, Aktie hashTabelle);
 int64_t poti(int n);
 int64_t Hash(string name);
 
-void printLastCSV(ifstream& bigStonk, Aktie hashTabelle){
-    if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
-    cout << "Aktienname: " << hashTabelle.getAktienName() << endl;
-    cout << "Aktienkuerzel: " << hashTabelle.getAktienKuerzel() << endl;
-    cout << "WKN: " << hashTabelle.getWKN() << endl;
-    cout << "Hashwert: " << hashTabelle.getHashWert() << endl;
-    getLine(bigStonk, 0);
-    getLine(bigStonk, 2);
-    cout << "#____________________________________________________________________________________#" << endl;
-}
 
 int main(){
 
@@ -180,6 +171,17 @@ void getLine(ifstream& bigStonk, int var){
         cout << "   " << date << "    |    " << open << "    |    " << high << "    |     " << low << "    |    " << close << "   |  " << adjClose << " |  " << volume << "\n";
     else
         cout << date << " | " << open << " | " << high << " | " << low << " | " << close << " | " << adjClose << " | " << volume << "\n";
+}
+
+void printLastCSV(ifstream& bigStonk, Aktie hashTabelle){
+    if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
+    cout << "Aktienname: " << hashTabelle.getAktienName() << endl;
+    cout << "Aktienkuerzel: " << hashTabelle.getAktienKuerzel() << endl;
+    cout << "WKN: " << hashTabelle.getWKN() << endl;
+    cout << "Hashwert: " << hashTabelle.getHashWert() << endl;
+    getLine(bigStonk, 0);
+    getLine(bigStonk, 2);
+    cout << "#____________________________________________________________________________________#" << endl;
 }
 
 int64_t poti(int n){
