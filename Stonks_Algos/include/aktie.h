@@ -22,9 +22,9 @@ class Aktie
     protected:
 
     private:
-        string aktienName{'0'};
-        string aktienKuerzel{'0'};
-        string WKN{'0'};
+        string aktienName{"\0"};
+        string aktienKuerzel{"\0"};
+        string WKN{"\0"};
         int64_t hashWert{0};
 
 };

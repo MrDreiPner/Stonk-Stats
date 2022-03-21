@@ -40,7 +40,8 @@ int main(){
                 cin >> WKN;
                 hashWert = Hash(aktienKuerzel);
                 int64_t emptyCheck = 0;
-                while(hashTabelle[hashWert].getHashWert() != emptyCheck){
+                int64_t delCheck = 2012;        //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
+                while(hashTabelle[hashWert].getHashWert() != emptyCheck && hashTabelle[hashWert].getHashWert() != delCheck){
                     hashWert = (hashWert * hashWert) % 2011;
                 }
                 hashTabelle[hashWert].setAktienName(aktienName);
@@ -50,6 +51,40 @@ int main(){
             }
             break;
             case 'd':{
+                cout << "Zu loeschnde Aktie => Aktienkuerzel: ";
+                string delAktKuerzel;
+                cin >> delAktKuerzel;
+                cout << "Zugehoeriger Aktienname: ";
+                string delAktName;
+                cin >> delAktName;
+                selAktKuerzel = "0";
+                hashWert = Hash(delAktKuerzel);
+                if(hashTabelle[hashWert].getHashWert() == 0){
+                    delAktKuerzel = "0";
+                    cout << "Aktie nicht gefunden!" << endl;
+                }
+                else if(hashTabelle[hashWert].getAktienName() != delAktName){
+                    while(hashTabelle[hashWert].getAktienName() != delAktName){
+                        hashWert = (hashWert * hashWert) % 2011;
+                        if(hashTabelle[hashWert].getHashWert() == 0){
+                            delAktKuerzel = "0";
+                            cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
+                            break;
+                        }
+                    }
+                    if(delAktKuerzel != "0"){
+                        hashTabelle[hashWert].setAktienKuerzel("0");
+                        hashTabelle[hashWert].setAktienName("0");
+                        hashTabelle[hashWert].setWKN("0");
+                        hashTabelle[hashWert].setHashWert(2012);
+                    }
+                }
+                else{
+                    hashTabelle[hashWert].setAktienKuerzel("0");
+                    hashTabelle[hashWert].setAktienName("0");
+                    hashTabelle[hashWert].setWKN("0");
+                    hashTabelle[hashWert].setHashWert(2012);
+                }
 
             }
             break;
