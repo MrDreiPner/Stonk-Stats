@@ -5,6 +5,87 @@
 
 using namespace std;
 
+void getLine(ifstream& bigStonk, int var);
+int64_t poti(int n);
+int64_t Hash(string name);
+
+
+int main(){
+
+    Aktie hashTabelle[2011];
+    char input = '\0';
+    while(input != 'q'){
+        cout << "What do you want to do?\nADD (a), DEL (d), IMPORT (i), SEARCH (s), PLOT (p), SAVE (c), LOAD (v), QUIT (q): " << endl;
+        cin >> input;
+        switch(input){
+            case 'a':{
+                string aktienName;
+                cout << "Aktienname: " << endl;
+                cin >> aktienName;
+                string aktienKuerzel;
+                cout << "Aktienkürzel: " << endl;
+                cin >> aktienKuerzel;
+                string WKN;
+                cout << "WKN: " << endl;
+                cin >> WKN;
+                int64_t hashWert = Hash(aktienKuerzel);
+                int64_t emptyCheck = 0;
+                while(hashTabelle[hashWert].getHashWert() != emptyCheck){
+                    hashWert = (hashWert * hashWert) % 2011;
+                }
+                hashTabelle[hashWert].setAktienName(aktienName);
+                hashTabelle[hashWert].setAktienKuerzel(aktienKuerzel);
+                hashTabelle[hashWert].setWKN(WKN);
+                hashTabelle[hashWert].setHashWert(hashWert);
+
+
+            }
+            break;
+            case 'd':{
+
+            }
+            break;
+            case 'i':{
+
+            }
+            break;
+            case 's':{
+
+            }
+            break;
+            case 'p':{
+
+            }
+            break;
+            case 'c':{
+
+            }
+            break;
+            case 'v':{
+
+            }
+            break;
+            case 'q':continue;
+            break;
+            default: cout << "\nInvalid Input!" << endl;
+        }
+    }
+
+    ifstream bigStonk("../CSV/MSFT.csv");
+    if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
+    getLine(bigStonk, 0);
+    while(bigStonk.good()){
+        getLine(bigStonk, 1);
+    }
+    cout << "#____________________________________________________________________________________#" << endl;
+    string hashi = "MSFT";
+    cout << "\n Hash test: \n" << endl;
+    int64_t hashed = Hash(hashi);
+    cout << hashed << endl;
+    return 0;
+}
+
+
 void getLine(ifstream& bigStonk, int var){
     string date;
     string open;
@@ -34,7 +115,7 @@ int64_t poti(int n){
     return num;
 }
 
-int64_t Hash(string name){ //max 15 Zeichen
+int64_t Hash(string name){ //max 30 Zeichen
     int64_t hashed = 0;
     int64_t n = name.size();
     int64_t m = 1;
@@ -47,56 +128,4 @@ int64_t Hash(string name){ //max 15 Zeichen
     }
     hashed %= 2011;
     return hashed;
-}
-
-int main(){
-    char input = '\0';
-    while(input != 'q'){
-        cout << "What do you want to do?\nADD (a), DEL (d), IMPORT (i), SEARCH (s), PLOT (p), SAVE (c), LOAD (v), QUIT (q): " << endl;
-        cin >> input;
-        switch(input){
-            case 'a':{
-
-            }
-            break;
-            case 'd':{
-
-            }
-            break;
-            case 'i':{
-
-            }
-            break;
-            case 's':{
-
-            }
-            break;
-            case 'p':{
-
-            }
-            break;
-            case 'c':{
-
-            }
-            break;
-            case 'v':{
-
-            }
-            break;
-            default: cout << "\nInvalid Input!" << endl;
-        }
-    }
-
-    ifstream bigStonk("../CSV/MSFT.csv");
-    if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
-    getLine(bigStonk, 0);
-    while(bigStonk.good()){
-        getLine(bigStonk, 1);
-    }
-    string hashi = "MSFT";
-    cout << "#____________________________________________________________________________________#" << endl;
-    cout << "\n Hash test: \n" << endl;
-    int64_t hashed = Hash(hashi);
-    cout << hashed << endl;
-    return 0;
 }

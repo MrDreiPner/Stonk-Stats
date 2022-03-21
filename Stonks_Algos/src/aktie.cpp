@@ -1,11 +1,11 @@
 #include "aktie.h"
 
-aktie::aktie()
+Aktie::Aktie()
 {
     //ctor
 }
 
-aktie::~aktie()
+Aktie::~Aktie()
 {
     //dtor
 }
