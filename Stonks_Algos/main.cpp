@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <fstream>
 #include <conio.h>
+#include <sstream>
 #include "aktie.h"
 
 using namespace std;
@@ -18,6 +19,7 @@ int main(){
     string selAktKuerzel = "0";
     string csvCall = "../CSV/"+selAktKuerzel+".csv";
     int64_t hashWert = 0;
+    stringstream ss;
     char input = '\0';
     while(input != 'q'){
         system("CLS");
@@ -39,9 +41,8 @@ int main(){
                 cout << "WKN: " << endl;
                 cin >> WKN;
                 hashWert = Hash(aktienKuerzel);
-                int64_t emptyCheck = 0;
-                int64_t delCheck = 2012;        //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
-                while(hashTabelle[hashWert].getHashWert() != emptyCheck && hashTabelle[hashWert].getHashWert() != delCheck){
+                //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
+                while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
                     hashWert = (hashWert * hashWert) % 2011;
                 }
                 hashTabelle[hashWert].setAktienName(aktienName);
@@ -59,14 +60,14 @@ int main(){
                 cin >> delAktName;
                 selAktKuerzel = "0";
                 hashWert = Hash(delAktKuerzel);
-                if(hashTabelle[hashWert].getHashWert() == 0){
+                if(hashTabelle[hashWert].getHashWert() == -1){
                     delAktKuerzel = "0";
                     cout << "Aktie nicht gefunden!" << endl;
                 }
                 else if(hashTabelle[hashWert].getAktienName() != delAktName){
                     while(hashTabelle[hashWert].getAktienName() != delAktName){
                         hashWert = (hashWert * hashWert) % 2011;
-                        if(hashTabelle[hashWert].getHashWert() == 0){
+                        if(hashTabelle[hashWert].getHashWert() == -1){
                             delAktKuerzel = "0";
                             cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
                             break;
@@ -118,14 +119,14 @@ int main(){
                 string selAktName;
                 cin >> selAktName;
                 hashWert = Hash(selAktKuerzel);
-                if(hashTabelle[hashWert].getHashWert() == 0){
+                if(hashTabelle[hashWert].getHashWert() == -1){
                     selAktKuerzel = "0";
                     cout << "Aktie nicht gefunden!" << endl;
                 }
                 else if(hashTabelle[hashWert].getAktienName() != selAktName){
                     while(hashTabelle[hashWert].getAktienName() != selAktName){
                         hashWert = (hashWert * hashWert) % 2011;
-                        if(hashTabelle[hashWert].getHashWert() == 0){
+                        if(hashTabelle[hashWert].getHashWert() == -1){
                             selAktKuerzel = "0";
                             cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
                             break;
@@ -154,7 +155,7 @@ int main(){
                 ofstream file;
                 file.open("hashTabelle.csv");
                 for(int i = 0; i < 2011; i++){
-                    if(hashTabelle[i].getHashWert() == 0)
+                    if(hashTabelle[i].getHashWert() == -1)
                         continue;
                     file << hashTabelle[i].getAktienName();
                     file << ",";
@@ -178,14 +179,15 @@ int main(){
                     getline(fileIn, kuerzel, ',');
                     getline(fileIn, wkn, ',');
                     getline(fileIn, hashNum, '\n');
-                    int64_t hashy = stoi(hashNum);
+                    int64_t hashy = Hash(kuerzel);
+                    while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
+                        hashWert = (hashWert * hashWert) % 2011;
+                    }
                     hashTabelle[hashy].setAktienName(name);
                     hashTabelle[hashy].setAktienKuerzel(kuerzel);
                     hashTabelle[hashy].setWKN(wkn);
                     hashTabelle[hashy].setHashWert(hashy);
                 }
-
-
             }
             break;
             case 'q':continue;
