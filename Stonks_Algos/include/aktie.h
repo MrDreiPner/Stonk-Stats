@@ -14,6 +14,8 @@ class aktie
 
     private:
         string AktienName;
+        string AktienKuerzel;
+        string WKN;
         string hashWert;
 
 };

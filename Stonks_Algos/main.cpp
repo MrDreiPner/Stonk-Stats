@@ -50,13 +50,50 @@ int64_t Hash(string name){ //max 15 Zeichen
 }
 
 int main(){
+    char input = '\0';
+    while(input != 'q'){
+        cout << "What do you want to do?\nADD (a), DEL (d), IMPORT (i), SEARCH (s), PLOT (p), SAVE (c), LOAD (v), QUIT (q): " << endl;
+        cin >> input;
+        switch(input){
+            case 'a':{
+
+            }
+            break;
+            case 'd':{
+
+            }
+            break;
+            case 'i':{
+
+            }
+            break;
+            case 's':{
+
+            }
+            break;
+            case 'p':{
+
+            }
+            break;
+            case 'c':{
+
+            }
+            break;
+            case 'v':{
+
+            }
+            break;
+            default: cout << "\nInvalid Input!" << endl;
+        }
+    }
+
     ifstream bigStonk("../CSV/MSFT.csv");
     if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
     getLine(bigStonk, 0);
     while(bigStonk.good()){
         getLine(bigStonk, 1);
     }
-    string hashi = "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+    string hashi = "MSFT";
     cout << "#____________________________________________________________________________________#" << endl;
     cout << "\n Hash test: \n" << endl;
     int64_t hashed = Hash(hashi);
