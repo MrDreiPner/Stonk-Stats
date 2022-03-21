@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <sstream>
 #include "aktie.h"
+#include <sstream>
 
 using namespace std;
 
@@ -18,6 +19,7 @@ int main(){
     Aktie hashTabelle[2011];
     string selAktKuerzel = "0";
     string csvCall = "../CSV/"+selAktKuerzel+".csv";
+    stringstream stream;
     int64_t hashWert = 0;
     stringstream ss;
     char input = '\0';
@@ -183,6 +185,7 @@ int main(){
                     while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
                         hashWert = (hashWert * hashWert) % 2011;
                     }
+
                     hashTabelle[hashy].setAktienName(name);
                     hashTabelle[hashy].setAktienKuerzel(kuerzel);
                     hashTabelle[hashy].setWKN(wkn);
