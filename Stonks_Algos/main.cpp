@@ -23,6 +23,7 @@ int main(){
         system("CLS");
         if(selAktKuerzel != "0"){
             cout << "Aktuell hinterlegte Aktie => " << hashTabelle[hashWert].getAktienName() << endl;
+            cout << "Aktuelles Aktienkuerzel => " << hashTabelle[hashWert].getAktienKuerzel() << endl;
         }
         cout << "Was wollen Sie machen?\nADD (a), DEL (d), IMPORT (i), SEARCH (s), PLOT (p), SAVE (c), LOAD (v), QUIT (q): " << endl;
         cin >> input;
