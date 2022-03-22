@@ -33,28 +33,38 @@ int main(){
                 string aktienKuerzel;
                 string aktienName;
                 string WKN;
+                int fail = 0;
                 while(1){
-                    cout << "Aktienkuerzel: " << endl;
+                    fail = 0;
+                    cout << "Aktienkuerzel (x zum Abbrechen): " << endl;
                     cin >> aktienKuerzel;
+                    if(aktienKuerzel == "x"){
+                        fail = 1;
+                        break;
+                    }
+                    hashWert = Hash(aktienKuerzel);
+                    //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
+                    while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
+                        if(hashTabelle[hashWert].getAktienKuerzel() == aktienKuerzel){
+                            cout << "Aktie bereits hinterlegt." << endl;
+                            fail = 2;
+                            break;
+                        }
+                        hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
+                    }
+                    if(fail == 2) continue;
                     cout << "Aktienname: " << endl;
                     cin >> aktienName;
                     cout << "WKN: " << endl;
                     cin >> WKN;
-                    hashWert = Hash(aktienKuerzel);
-                    if(hashTabelle[hashWert].getAktienKuerzel() == aktienKuerzel){
-                        cout << "Aktie bereits hinterlegt." << endl;
-                        continue;
-                    }
                     break;
                 }
-                //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
-                while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
-                    hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
+                if(fail == 0){
+                    hashTabelle[hashWert].setAktienName(aktienName);
+                    hashTabelle[hashWert].setAktienKuerzel(aktienKuerzel);
+                    hashTabelle[hashWert].setWKN(WKN);
+                    hashTabelle[hashWert].setHashWert(hashWert);
                 }
-                hashTabelle[hashWert].setAktienName(aktienName);
-                hashTabelle[hashWert].setAktienKuerzel(aktienKuerzel);
-                hashTabelle[hashWert].setWKN(WKN);
-                hashTabelle[hashWert].setHashWert(hashWert);
             }
             break;
             case 'd':{
@@ -84,6 +94,7 @@ int main(){
                         hashTabelle[hashWert].setAktienName("0");
                         hashTabelle[hashWert].setWKN("0");
                         hashTabelle[hashWert].setHashWert(2012);
+                        cout << "Aktie geloescht!" << endl;
                     }
                 }
                 else{
@@ -91,6 +102,7 @@ int main(){
                     hashTabelle[hashWert].setAktienName("0");
                     hashTabelle[hashWert].setWKN("0");
                     hashTabelle[hashWert].setHashWert(2012);
+                    cout << "Aktie geloescht!" << endl;
                 }
 
             }
@@ -117,16 +129,13 @@ int main(){
             case 's':{
                 cout << "Aktienkuerzel nach dem Sie suchen: " << endl;
                 cin >> selAktKuerzel;
-                cout << "Aktienname nach dem Sie suchen: " << endl;
-                string selAktName;
-                cin >> selAktName;
                 hashWert = Hash(selAktKuerzel);
                 if(hashTabelle[hashWert].getHashWert() == -1){
                     selAktKuerzel = "0";
                     cout << "Aktie nicht gefunden!" << endl;
                 }
-                else if(hashTabelle[hashWert].getAktienName() != selAktName){
-                    while(hashTabelle[hashWert].getAktienName() != selAktName){
+                else if(hashTabelle[hashWert].getAktienKuerzel() != selAktKuerzel){
+                    while(hashTabelle[hashWert].getAktienKuerzel() != selAktKuerzel){
                         hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
                         if(hashTabelle[hashWert].getHashWert() == -1){
                             selAktKuerzel = "0";
