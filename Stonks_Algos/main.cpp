@@ -42,7 +42,7 @@ int main(){
                 hashWert = Hash(aktienKuerzel);
                 //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
                 while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
-                    hashWert = (hashWert * hashWert) % 2011;
+                    hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
                 }
                 hashTabelle[hashWert].setAktienName(aktienName);
                 hashTabelle[hashWert].setAktienKuerzel(aktienKuerzel);
@@ -65,7 +65,7 @@ int main(){
                 }
                 else if(hashTabelle[hashWert].getAktienName() != delAktName){
                     while(hashTabelle[hashWert].getAktienName() != delAktName){
-                        hashWert = (hashWert * hashWert) % 2011;
+                        hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
                         if(hashTabelle[hashWert].getHashWert() == -1){
                             delAktKuerzel = "0";
                             cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
@@ -120,7 +120,7 @@ int main(){
                 }
                 else if(hashTabelle[hashWert].getAktienName() != selAktName){
                     while(hashTabelle[hashWert].getAktienName() != selAktName){
-                        hashWert = (hashWert * hashWert) % 2011;
+                        hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
                         if(hashTabelle[hashWert].getHashWert() == -1){
                             selAktKuerzel = "0";
                             cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
@@ -204,8 +204,9 @@ int main(){
                     getline(fileIn, wkn, ',');
                     getline(fileIn, hashNum, '\n');
                     int64_t hashy = Hash(kuerzel);
-                    while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
-                        hashWert = (hashWert * hashWert) % 2011;
+                    while((hashTabelle[hashy].getHashWert() != -1 && hashTabelle[hashy].getHashWert() != 2012)
+                          && (hashTabelle[hashy].getAktienName()!= name && hashTabelle[hashy].getAktienKuerzel()!= kuerzel)){
+                        hashy = ((hashy+1) * (hashy+1)) % 2011;
                     }
 
                     hashTabelle[hashy].setAktienName(name);
