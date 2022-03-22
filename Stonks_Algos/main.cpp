@@ -29,12 +29,12 @@ int main(){
         cin >> input;
         switch(input){
             case 'a':{
-                string aktienName;
-                cout << "Aktienname: " << endl;
-                cin >> aktienName;
                 string aktienKuerzel;
                 cout << "Aktienkuerzel: " << endl;
                 cin >> aktienKuerzel;
+                string aktienName;
+                cout << "Aktienname: " << endl;
+                cin >> aktienName;
                 string WKN;
                 cout << "WKN: " << endl;
                 cin >> WKN;
@@ -113,7 +113,7 @@ int main(){
             case 's':{
                 cout << "Aktienkuerzel nach dem Sie suchen: " << endl;
                 cin >> selAktKuerzel;
-                cout << "AktienName nach dem Sie suchen: " << endl;
+                cout << "Aktienname nach dem Sie suchen: " << endl;
                 string selAktName;
                 cin >> selAktName;
                 hashWert = Hash(selAktKuerzel);
