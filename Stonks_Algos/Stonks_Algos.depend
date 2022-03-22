@@ -1,10 +1,12 @@
 # depslib dependency file v1.0
-1647352539 source:c:\users\matus\documents\cb_folder\stonks_faltas_porubsky\stonks\stonks_algos\main.cpp
+1647969075 source:c:\users\matus\documents\cb_folder\stonks_faltas_porubsky\stonks\stonks_algos\main.cpp
 	<iostream>
 	<assert.h>
 	<fstream>
+	<conio.h>
+	"aktie.h"
 
-1647352737 source:c:\users\matus\documents\cb_folder\stonks_faltas_porubsky\stonks\stonks_algos\src\aktie.cpp
+1647969042 source:c:\users\matus\documents\cb_folder\stonks_faltas_porubsky\stonks\stonks_algos\src\aktie.cpp
 	"aktie.h"
 
 1647353053 c:\users\matus\documents\cb_folder\stonks_faltas_porubsky\stonks\stonks_algos\include\aktie.h
