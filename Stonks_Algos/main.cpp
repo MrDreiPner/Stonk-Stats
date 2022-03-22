@@ -7,6 +7,7 @@
 using namespace std;
 
 void getLine(ifstream& bigStonk, int var);
+int createPlot(ifstream& bigStonk, int prevClose);
 void printLastCSV(ifstream& bigStonk, Aktie hashTabelle);
 int64_t poti(int n);
 int64_t Hash(string name);
@@ -88,26 +89,22 @@ int main(){
             }
             break;
             case 'i':{
-                if(selAktKuerzel == "="){
+                if(selAktKuerzel == "0"){
                     cout << "Keine Aktie ausgewaehlt. Bitte mit SEARCH eine Aktie zum importieren aussuchen!" << endl;
                 }
                 else{
                     ifstream bigStonk(csvCall);
-                    if(selAktKuerzel != "0"){
-                        if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
-                        getLine(bigStonk, 0);
-                        while(bigStonk.good()){
+                    cout << "\nImport" << endl;
+                    cout << "Aktienname => " << hashTabelle[hashWert].getAktienName() << endl;
+                    cout << "Aktienkuerzel => " << hashTabelle[hashWert].getAktienKuerzel() << endl;
+                    if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
+                    getLine(bigStonk, 0);
+                    while(bigStonk.good()){
                             getLine(bigStonk, 1);
                     }
                     cout << "#____________________________________________________________________________________#" << endl;
                     bigStonk.close();
-                    /*cout << "\n Hash test: \n" << endl;
-                    int64_t hashed = Hash(selAktKuerzel);
-                    cout << selAktKuerzel << endl;
-                    cout << hashed << endl;*/
-                    }
                 }
-
             }
             break;
             case 's':{
@@ -146,12 +143,35 @@ int main(){
             }
             break;
             case 'p':{
-
+                if(selAktKuerzel == "0"){
+                    cout << "Keine Aktie ausgewaehlt. Bitte mit SEARCH eine Aktie zum importieren aussuchen!" << endl;
+                }
+                else{
+                    ifstream bigStonk(csvCall);
+                    if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
+                    string trash;
+                    getline(bigStonk,trash, '\n');
+                    int prevClose = 0;
+                    cout << "\nPlot" << endl;
+                    cout << "Aktienname => " << hashTabelle[hashWert].getAktienName() << endl;
+                    cout << "Aktienkuerzel => " << hashTabelle[hashWert].getAktienKuerzel() << endl;
+                    prevClose = createPlot(bigStonk, prevClose);
+                    while(bigStonk.good()){
+                        prevClose = createPlot(bigStonk, prevClose);
+                    }
+                    cout << endl;
+                    cout << "\n_ <= Plateau\n\\ <= Niedriger\n/ <= Hoeher" << endl;
+                    bigStonk.close();
+                }
             }
             break;
             case 'c':{
+                cout << "SPEICHERN\nFilename eingeben (OHNE .csv): " << endl;
+                string fileName;
+                cin >> fileName;
+                fileName = "../Saved_Files/"+fileName+".csv";
                 ofstream file;
-                file.open("hashTabelle.csv");
+                file.open(fileName);
                 for(int i = 0; i < 2011; i++){
                     if(hashTabelle[i].getHashWert() == -1)
                         continue;
@@ -167,8 +187,14 @@ int main(){
             }
             break;
             case 'v':{
-                ifstream fileIn("hashTabelle.csv");
-                while(fileIn.good()){
+                cout << "LADEN\nFilename eingeben (OHNE .csv): " << endl;
+                string fileName;
+                cin >> fileName;
+                fileName = "../Saved_Files/"+fileName+".csv";
+                ifstream fileIn(fileName);
+                if(!fileIn.is_open()) cout << "No File found" << endl;
+                else{
+                    while(fileIn.good()){
                     string name;
                     string kuerzel;
                     string wkn;
@@ -186,6 +212,8 @@ int main(){
                     hashTabelle[hashy].setAktienKuerzel(kuerzel);
                     hashTabelle[hashy].setWKN(wkn);
                     hashTabelle[hashy].setHashWert(hashy);
+                    }
+                    cout << "Success!" << endl;
                 }
             }
             break;
@@ -199,6 +227,30 @@ int main(){
     return 0;
 }
 
+int createPlot(ifstream& bigStonk, int prevClose){
+    string trash;
+    string close;
+
+    getline(bigStonk, trash, ',');
+    getline(bigStonk, trash, ',');
+    getline(bigStonk, trash, ',');
+    getline(bigStonk, trash, ',');
+    getline(bigStonk, close, ',');
+    getline(bigStonk, trash, ',');
+    getline(bigStonk, trash, '\n');
+    int currentClose;
+    currentClose = stoi(close);
+    if(currentClose == prevClose){
+        cout << "_";
+    }
+    else if(currentClose < prevClose){
+        cout << "\\";
+    }
+    else{
+        cout << "/";
+    }
+    return currentClose;
+}
 
 void getLine(ifstream& bigStonk, int var){
     if(var == 2){                                       //Looks for the last line when called in a search
