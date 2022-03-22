@@ -31,15 +31,22 @@ int main(){
         switch(input){
             case 'a':{
                 string aktienKuerzel;
-                cout << "Aktienkuerzel: " << endl;
-                cin >> aktienKuerzel;
                 string aktienName;
-                cout << "Aktienname: " << endl;
-                cin >> aktienName;
                 string WKN;
-                cout << "WKN: " << endl;
-                cin >> WKN;
-                hashWert = Hash(aktienKuerzel);
+                while(1){
+                    cout << "Aktienkuerzel: " << endl;
+                    cin >> aktienKuerzel;
+                    cout << "Aktienname: " << endl;
+                    cin >> aktienName;
+                    cout << "WKN: " << endl;
+                    cin >> WKN;
+                    hashWert = Hash(aktienKuerzel);
+                    if(hashTabelle[hashWert].getAktienKuerzel() == aktienKuerzel){
+                        cout << "Aktie bereits hinterlegt." << endl;
+                        continue;
+                    }
+                    break;
+                }
                 //Falls Werte tiefer eingesetzt wurden, wird der Platz mit 2012 markiert um die Suche tiefer voranzutreiben
                 while(hashTabelle[hashWert].getHashWert() != -1 && hashTabelle[hashWert].getHashWert() != 2012){
                     hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
@@ -305,9 +312,9 @@ void printLastCSV(ifstream& bigStonk, Aktie hashTabelle){
 }
 
 int64_t poti(int n){
-    int64_t num = 3;
+    int64_t num = 31;
     for(int i = 0; i < n; i++){
-        num *= 3;
+        num *= 31;
     }
     return num;
 }
