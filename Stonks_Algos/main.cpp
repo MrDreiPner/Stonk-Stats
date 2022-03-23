@@ -29,7 +29,7 @@ int main(){
         cout << "Was wollen Sie machen?\nADD (a), DEL (d), IMPORT (i), SEARCH (s), PLOT (p), SAVE (c), LOAD (v), QUIT (q): " << endl;
         cin >> input;
         switch(input){
-            case 'a':{
+            case 'a':{ //ADD
                 string aktienKuerzel;
                 string aktienName;
                 string WKN;
@@ -67,7 +67,7 @@ int main(){
                 }
             }
             break;
-            case 'd':{
+            case 'd':{ //DEL
                 cout << "Zu loeschnde Aktie => Aktienkuerzel: ";
                 string delAktKuerzel;
                 cin >> delAktKuerzel;
@@ -76,10 +76,11 @@ int main(){
                 cin >> delAktName;
                 selAktKuerzel = "0";
                 hashWert = Hash(delAktKuerzel);
+                //Suche in tabelle
                 if(hashTabelle[hashWert].getHashWert() == -1){
                     delAktKuerzel = "0";
                     cout << "Aktie nicht gefunden!" << endl;
-                }
+                } //Wenn nicht gefunden, suche nach sondiertem hashwert
                 else if(hashTabelle[hashWert].getAktienName() != delAktName){
                     while(hashTabelle[hashWert].getAktienName() != delAktName){
                         hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
@@ -88,7 +89,7 @@ int main(){
                             cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
                             break;
                         }
-                    }
+                    }//löschen
                     if(delAktKuerzel != "0"){
                         hashTabelle[hashWert].setAktienKuerzel("0");
                         hashTabelle[hashWert].setAktienName("0");
@@ -97,7 +98,7 @@ int main(){
                         cout << "Aktie geloescht!" << endl;
                     }
                 }
-                else{
+                else{//löschen
                     hashTabelle[hashWert].setAktienKuerzel("0");
                     hashTabelle[hashWert].setAktienName("0");
                     hashTabelle[hashWert].setWKN("0");
@@ -107,11 +108,11 @@ int main(){
 
             }
             break;
-            case 'i':{
+            case 'i':{ //IMPORT
                 if(selAktKuerzel == "0"){
                     cout << "Keine Aktie ausgewaehlt. Bitte mit SEARCH eine Aktie zum importieren aussuchen!" << endl;
                 }
-                else{
+                else{//printet importierte Kurswerte nach erfolgreicher Suche
                     ifstream bigStonk(csvCall);
                     cout << "\nImport" << endl;
                     cout << "Aktienname => " << hashTabelle[hashWert].getAktienName() << endl;
@@ -126,14 +127,14 @@ int main(){
                 }
             }
             break;
-            case 's':{
+            case 's':{ //SEARCH
                 cout << "Aktienkuerzel nach dem Sie suchen: " << endl;
                 cin >> selAktKuerzel;
                 hashWert = Hash(selAktKuerzel);
                 if(hashTabelle[hashWert].getHashWert() == -1){
                     selAktKuerzel = "0";
                     cout << "Aktie nicht gefunden!" << endl;
-                }
+                } //Suche über sondierung
                 else if(hashTabelle[hashWert].getAktienKuerzel() != selAktKuerzel){
                     while(hashTabelle[hashWert].getAktienKuerzel() != selAktKuerzel){
                         hashWert = ((hashWert+1) * (hashWert+1)) % 2011;
@@ -142,7 +143,7 @@ int main(){
                             cout << "Aktie nicht gefunden! Tiefe Suche." << endl;
                             break;
                         }
-                    }
+                    }//Gefunden: Ausgabe des aktuellsten kurseintrags
                     if(selAktKuerzel != "0"){
                         csvCall = "../CSV/"+selAktKuerzel+".csv";
                         ifstream bigStonk(csvCall);
@@ -150,7 +151,7 @@ int main(){
                         bigStonk.close();
                     }
                 }
-                else{
+                else{//Gefunden: Ausgabe des aktuellsten kurseintragss
                     csvCall = "../CSV/"+selAktKuerzel+".csv";
                     ifstream bigStonk(csvCall);
                     printLastCSV(bigStonk, hashTabelle[hashWert]);
@@ -162,7 +163,7 @@ int main(){
                 if(selAktKuerzel == "0"){
                     cout << "Keine Aktie ausgewaehlt. Bitte mit SEARCH eine Aktie zum importieren aussuchen!" << endl;
                 }
-                else{
+                else{//plottet nach erfolgreicher Suche
                     ifstream bigStonk(csvCall);
                     if(!bigStonk.is_open()) cout << "Fucky Wucky" << endl;
                     string trash;
@@ -181,7 +182,7 @@ int main(){
                 }
             }
             break;
-            case 'c':{
+            case 'c':{ //Speichert Hashtabelle in csv File ab
                 cout << "SPEICHERN\nFilename eingeben (OHNE .csv): " << endl;
                 string fileName;
                 cin >> fileName;
@@ -190,7 +191,7 @@ int main(){
                 file.open(fileName);
                 for(int i = 0; i < 2011; i++){
                     if(hashTabelle[i].getHashWert() == -1)
-                        continue;
+                        continue; //filtert Einträge nach Hashwert, wenn -1, dann überspringen
                     file << hashTabelle[i].getAktienName();
                     file << ",";
                     file << hashTabelle[i].getAktienKuerzel();
@@ -202,14 +203,14 @@ int main(){
                 }
             }
             break;
-            case 'v':{
+            case 'v':{ //Laden der Hashtabelle aus csv File
                 cout << "LADEN\nFilename eingeben (OHNE .csv): " << endl;
                 string fileName;
                 cin >> fileName;
                 fileName = "../Saved_Files/"+fileName+".csv";
                 ifstream fileIn(fileName);
                 if(!fileIn.is_open()) cout << "No File found" << endl;
-                else{
+                else{ //Füllt Hashtabelle mit Werten aus dem File auf
                     while(fileIn.good()){
                     string name;
                     string kuerzel;
@@ -220,11 +221,13 @@ int main(){
                     getline(fileIn, wkn, ',');
                     getline(fileIn, hashNum, '\n');
                     int64_t hashy = Hash(kuerzel);
+                    //Falls schon ein Wert in der Hashtabelle mit dem selben Hashwert aber anderem Kürzel, Name
+                    //=> Sondierung bis leerer Platz gefunden wird
                     while((hashTabelle[hashy].getHashWert() != -1 && hashTabelle[hashy].getHashWert() != 2012)
                           && (hashTabelle[hashy].getAktienName()!= name && hashTabelle[hashy].getAktienKuerzel()!= kuerzel)){
                         hashy = ((hashy+1) * (hashy+1)) % 2011;
                     }
-
+                    //Füllt Daten in die Hashtabelle am Index hashy
                     hashTabelle[hashy].setAktienName(name);
                     hashTabelle[hashy].setAktienKuerzel(kuerzel);
                     hashTabelle[hashy].setWKN(wkn);
@@ -244,10 +247,11 @@ int main(){
     return 0;
 }
 
+//Print für Aktienkurs, /: Kurs gestiegen, _: Kurs unverändert, \: Kurs gesunken
+//Vergleicht Kurs pro Tag
 int createPlot(ifstream& bigStonk, int prevClose){
     string trash;
     string close;
-
     getline(bigStonk, trash, ',');
     getline(bigStonk, trash, ',');
     getline(bigStonk, trash, ',');
@@ -258,13 +262,13 @@ int createPlot(ifstream& bigStonk, int prevClose){
     int currentClose;
     currentClose = stoi(close);
     if(currentClose == prevClose){
-        cout << "_";
+        cout << "_"; //Plateau
     }
     else if(currentClose < prevClose){
-        cout << "\\";
+        cout << "\\"; //Gesunken
     }
     else{
-        cout << "/";
+        cout << "/"; //Gestiegen
     }
     return currentClose;
 }
@@ -320,6 +324,7 @@ void printLastCSV(ifstream& bigStonk, Aktie hashTabelle){
     cout << "#____________________________________________________________________________________#" << endl;
 }
 
+//---------Potenziert 31
 int64_t poti(int n){
     int64_t num = 31;
     for(int i = 0; i < n; i++){
@@ -327,7 +332,7 @@ int64_t poti(int n){
     }
     return num;
 }
-
+//---------Hashfkt Hashwert= Buchstabe * 31 ^(Anzahl der Buchstaben - m)
 int64_t Hash(string name){ //max 30 Zeichen
     int64_t hashed = 0;
     int64_t n = name.size();
@@ -336,9 +341,7 @@ int64_t Hash(string name){ //max 30 Zeichen
         int64_t letter = name[i];
         hashed += letter * poti(n-m);
         hashed %= 2011;
-        hashed *= name.size();
         m++;
     }
-    hashed %= 2011;
     return hashed;
 }
