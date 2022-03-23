@@ -201,6 +201,7 @@ int main(){
                     file << hashTabelle[i].getHashWert();
                     file << "\n";
                 }
+                cout << "File " << fileName <<".csv saved" << endl;
             }
             break;
             case 'v':{ //Laden der Hashtabelle aus csv File
