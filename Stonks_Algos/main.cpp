@@ -275,24 +275,24 @@ int createPlot(ifstream& bigStonk, int prevClose){
 
 void getLine(ifstream& bigStonk, int var){
     if(var == 2){                                       //Looks for the last line when called in a search
-        bigStonk.seekg(-1,ios_base::end);
+        bigStonk.seekg(-1,ios_base::end);               //Source [https://stackoverflow.com/questions/11876290/c-fastest-way-to-read-only-last-line-of-text-file
         int loop = 1;
         while(loop) {
             char ch;
-            bigStonk.get(ch);                            // Get current byte's data
+            bigStonk.get(ch);                           // Get current byte's data
 
             if((int)bigStonk.tellg() <= 1){             // If the data was at or before the 0th byte
-                bigStonk.seekg(0);                       // The first line is the last line
+                bigStonk.seekg(0);                      // The first line is the last line
                 loop = 0;                               // So stop there
             }
             else if(ch == '\n') {                       // If the data was a newline
                 loop = 0;                               // Stop at the current position.
             }
             else {                                      // If the data was neither a newline nor at the 0 byte
-                bigStonk.seekg(-2,ios_base::cur);        // Move to the front of that data, then to the front of the data before it
+                bigStonk.seekg(-2,ios_base::cur);       // Move to the front of that data, then to the front of the data before it
             }
         }
-    }
+    }                                                   //]
     string date;
     string open;
     string high;
